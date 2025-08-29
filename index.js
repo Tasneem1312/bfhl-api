@@ -1,4 +1,3 @@
-// index.js
 require('dotenv').config();
 const express = require('express');
 const app = express();
@@ -10,6 +9,7 @@ const DOB = process.env.DOB || '17091999';
 const EMAIL = process.env.EMAIL || 'john@xyz.com';
 const ROLL_NUMBER = process.env.ROLL_NUMBER || 'ABCD123';
 
+// Helper functions
 function formatUserId(fullName, dob) {
   return String(fullName).trim().toLowerCase().replace(/\s+/g, '_') + '_' + dob;
 }
@@ -23,6 +23,17 @@ function alternatingCaps(s) {
   return out;
 }
 
+// ✅ Root Route
+app.get("/", (req, res) => {
+    res.send("Welcome to BFHL API! Use /bfhl endpoint.");
+});
+
+// ✅ GET /bfhl (for operation code)
+app.get("/bfhl", (req, res) => {
+    res.json({ operation_code: 1 });
+});
+
+// ✅ POST /bfhl
 app.post('/bfhl', (req, res) => {
   try {
     const payload = req.body;
@@ -33,8 +44,8 @@ app.post('/bfhl', (req, res) => {
         message: 'Request body must be JSON with a "data" array.'
       });
     }
-    const data = payload.data;
 
+    const data = payload.data;
     const even_numbers = [];
     const odd_numbers = [];
     const alphabets = [];
@@ -80,5 +91,6 @@ app.post('/bfhl', (req, res) => {
   }
 });
 
+// ✅ Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`bfhl API listening on port ${PORT}`));
